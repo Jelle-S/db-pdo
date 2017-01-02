@@ -38,8 +38,6 @@ class Statement extends \PDOStatement {
 
   public function fetchTable($attributes = array()) {
     $table = "<table";
-    $table .= !empty($table_id) ? " id='$table_id'" : '';
-    $table .= !empty($table_class) ? " class='$table_class'" : '';
     foreach ($attributes as $attribute => $value) {
       if (is_array($value)) {
         //support multiple classes (e.g. class = "class1 class2").
