@@ -1,0 +1,18 @@
+{
+    "name": "jelle-s/db-pdo",
+    "description": "Execute queries composed programatically using PDO.",
+    "type": "library",
+    "require": {
+    },
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Jelle Sebreghts",
+            "email": "sebreghts.jelle@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+      "psr-4": {"Jelle_S\\DataBase\\": "src/"}
+    }
+}
