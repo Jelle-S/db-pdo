@@ -5,7 +5,7 @@ namespace Jelle_S\DataBase\Query;
 /**
  * Description of Select
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 class Select extends Query {
   use QueryTrait\Join;

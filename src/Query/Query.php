@@ -7,7 +7,7 @@ use Jelle_S\DataBase\Connection;
 /**
  * Description of Query
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 abstract class Query {
 

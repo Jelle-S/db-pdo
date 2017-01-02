@@ -5,7 +5,7 @@ namespace Jelle_S\DataBase\Query;
 /**
  * Description of Delete
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 class Delete extends Query {
 

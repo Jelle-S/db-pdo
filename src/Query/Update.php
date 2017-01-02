@@ -11,7 +11,7 @@ namespace Jelle_S\DataBase\Query;
 /**
  * Description of Update
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 class Update extends Query{
   use QueryTrait\Where;

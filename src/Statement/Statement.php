@@ -5,7 +5,7 @@ namespace Jelle_S\DataBase\Statement;
 /**
  * Description of Statement
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 class Statement extends \PDOStatement {
 

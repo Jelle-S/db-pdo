@@ -10,7 +10,7 @@ namespace Jelle_S\DataBase\Query\QueryTrait;
 
 /**
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 trait Fields {
 

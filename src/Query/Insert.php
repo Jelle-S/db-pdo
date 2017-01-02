@@ -11,7 +11,7 @@ namespace Jelle_S\DataBase\Query;
 /**
  * Description of Insert
  *
- * @author drupalpro
+ * @author Jelle Sebreghts
  */
 class Insert extends Query {
   use QueryTrait\FieldsWithValues;
