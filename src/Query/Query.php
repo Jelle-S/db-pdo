@@ -5,7 +5,7 @@ namespace Jelle_S\DataBase\Query;
 use Jelle_S\DataBase\Connection;
 
 /**
- * Description of Query
+ * Represents an SQL query.
  *
  * @author Jelle Sebreghts
  */
@@ -15,20 +15,41 @@ abstract class Query {
   protected $bind = [];
   protected $connection;
 
-  public abstract function build();
-
+  /**
+   * Creates a new \Jelle_S\DataBase\Query\Query object.
+   *
+   * @param \Jelle_S\DataBase\Connection $connection
+   *   The connection on which to execute this query.
+   */
   public function __construct(Connection $connection) {
     $this->connection = $connection;
   }
 
+  /**
+   * Build the query.
+   *
+   * @return $this
+   */
+  public abstract function build();
+
+  /**
+   * Execute the Query.
+   *
+   * @return \Jelle_S\DataBase\Statement\Statement|FALSE
+   *   FALSE on failure, returns a Statement on success.
+   */
   public function run() {
     return $this->connection->run($this);
   }
 
   /**
    * Helper function to assure the data to bind is an array.
+   *
    * @param mixed $bind
-   * @return Array
+   *   The data to bind.
+   *
+   * @return array
+   *   The sanitized data to bind.
    */
   protected function cleanup($bind) {
     if (!is_array($bind)) {
@@ -42,6 +63,9 @@ abstract class Query {
     return $bind;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function __toString() {
     if (!$this->sql) {
       $this->build();
@@ -49,6 +73,12 @@ abstract class Query {
     return $this->sql;
   }
 
+  /**
+   * Get the parameters to bind.
+   *
+   * @return array
+   *   An associative array of the parameters to bind.
+   */
   public function getParameters() {
     return $this->bind;
   }

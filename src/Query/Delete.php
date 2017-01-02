@@ -3,7 +3,7 @@
 namespace Jelle_S\DataBase\Query;
 
 /**
- * Description of Delete
+ * Represents an SQL delete query.
  *
  * @author Jelle Sebreghts
  */
@@ -16,14 +16,21 @@ class Delete extends Query {
 
   protected $table;
 
+  /**
+   * Creates a new \Jelle_S\DataBase\Query\Delete object.
+   *
+   * @param \Jelle_S\DataBase\Connection $connection
+   *   The connection on which to execute this query.
+   * @param string $table
+   *   The table to execute the query on.
+   */
   public function __construct(\Jelle_S\DataBase\Connection $connection, $table) {
     parent::__construct($connection);
     $this->table = $table;
   }
 
   /**
-   * Build the query. If this is not executed before the run() method, it will be called by that method.
-   * @return db
+   * {@inheritdoc}
    */
   public function build() {
     $this->sql = "DELETE FROM " . $this->table;

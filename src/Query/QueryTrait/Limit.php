@@ -3,16 +3,23 @@
 namespace Jelle_S\DataBase\Query\QueryTrait;
 
 /**
+ * Add a limit clause to queries.
  *
  * @author Jelle Sebreghts
  */
 trait Limit {
+
   protected $limit = '';
+
   /**
    * Add a limit clause to the query.
-   * @param Integer $limit
-   * @param Integer $range
-   * @return db
+   *
+   * @param int $limit
+   *   The limit.
+   * @param int $range
+   *   The range.
+   *
+   * @return $this
    */
   public function limit($limit, $range = NULL) {
     if (empty($range) || $this->type == 'update' || $this->type == 'delete') {

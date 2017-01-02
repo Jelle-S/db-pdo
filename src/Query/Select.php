@@ -3,7 +3,7 @@
 namespace Jelle_S\DataBase\Query;
 
 /**
- * Description of Select
+ * Represents an SQL select query.
  *
  * @author Jelle Sebreghts
  */
@@ -20,6 +20,16 @@ class Select extends Query {
   protected $table;
   protected $alias;
 
+  /**
+   * Creates a new \Jelle_S\DataBase\Query\Select object.
+   *
+   * @param \Jelle_S\DataBase\Connection $connection
+   *   The connection on which to execute this query.
+   * @param string $table
+   *   The table to execute the query on.
+   * @param string $alias
+   *   The table alias.
+   */
   public function __construct(\Jelle_S\DataBase\Connection $connection, $table, $alias = '') {
     parent::__construct($connection);
     $this->table = $table;
@@ -27,8 +37,7 @@ class Select extends Query {
   }
 
   /**
-   * Build the query. If this is not executed before the run() method, it will be called by that method.
-   * @return db
+   * {@inheritdoc}
    */
   public function build() {
 

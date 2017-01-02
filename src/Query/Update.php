@@ -1,15 +1,9 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Jelle_S\DataBase\Query;
 
 /**
- * Description of Update
+ * Represents an SQL update query.
  *
  * @author Jelle Sebreghts
  */
@@ -23,14 +17,21 @@ class Update extends Query{
 
   protected $table;
 
+  /**
+   * Creates a new \Jelle_S\DataBase\Query\Update object.
+   *
+   * @param \Jelle_S\DataBase\Connection $connection
+   *   The connection on which to execute this query.
+   * @param string $table
+   *   The table to execute the query on.
+   */
   public function __construct(\Jelle_S\DataBase\Connection $connection, $table) {
     parent::__construct($connection);
     $this->table = $table;
   }
 
   /**
-   * Build the query. If this is not executed before the run() method, it will be called by that method.
-   * @return db
+   * {@inheritdoc}
    */
   public function build() {
 

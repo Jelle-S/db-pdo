@@ -3,57 +3,81 @@
 namespace Jelle_S\DataBase\Query\QueryTrait;
 
 /**
+ * Add join clauses to queries.
  *
  * @author Jelle Sebreghts
  */
 trait Join {
+
   protected $jointables = [];
+
   /**
-   * Add a join part to the query.
-   * @param string $table The table to join with.
-   * @param string $condition [optional] <p>The join condition.</p>
-   * @return db
+   * Add a join clause to the query.
+   *
+   * @param string $table
+   *   The table to join with.
+   * @param string $condition
+   *   (optional) The join condition.
+   *
+   * @return $this
    */
   public function join($table, $condition = NULL) {
     return $this->addJoin('INNER', $table, $condition);
   }
 
   /**
-   * Add an inner join part to the query.
-   * @param string $table The table to join with.
-   * @param string $condition [optional] <p>The join condition.</p>
-   * @return db
+   * Add an inner join clause to the query.
+   *
+   * @param string $table
+   *   The table to join with.
+   * @param string $condition
+   *   (optional) The join condition.
+   *
+   * @return $this
    */
   public function innerJoin($table, $condition = NULL) {
     return $this->addJoin('INNER', $table, $condition);
   }
 
   /**
-   * Add a left join part to the query.
-   * @param string $table The table to join with.
-   * @param string $condition [optional] <p>The join condition.</p>
-   * @return db
+   * Add a left join clause to the query.
+   *
+   * @param string $table
+   *   The table to join with.
+   * @param string $condition
+   * (optional) The join condition.
+   *
+   * @return $this
    */
   public function leftJoin($table, $condition = NULL) {
     return $this->addJoin('LEFT OUTER', $table, $condition);
   }
 
   /**
-   * Add a right join part to the query.
-   * @param string $table The table to join with.
-   * @param string $condition [optional] <p>The join condition.</p>
-   * @return db
+   * Add a right join clause to the query.
+   *
+   * @param string $table
+   *   The table to join with.
+   * @param string $condition
+   *   (optional) The join condition.
+   *
+   * @return $this
    */
   public function rightJoin($table, $condition = NULL) {
     return $this->addJoin('RIGHT OUTER', $table, $condition);
   }
 
   /**
-   * Add a join part to the query.
-   * @param string $type The join type ("INNER", "LEFT OUTER", "RIGHT OUTER").
-   * @param string $table The table to join with.
-   * @param string $condition [optional] <p>The join condition.</p>
-   * @return db
+   * Add a join clause to the query.
+   *
+   * @param string $type
+   *   The join type ("INNER", "LEFT OUTER", "RIGHT OUTER").
+   * @param string $table
+   *   The table to join with.
+   * @param string $condition
+   *   (optional) The join condition.
+   *
+   * @return $this
    */
   public function addJoin($type, $table, $condition = NULL) {
     $orig_alias = trim(substr($table, strpos($table, " ")));

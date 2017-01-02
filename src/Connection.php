@@ -2,25 +2,36 @@
 
 namespace Jelle_S\DataBase;
 
+/**
+ * Creates a database connection and executes queries.
+ *
+ * @author Jelle Sebreghts
+ */
 class Connection extends \PDO {
 
-  private $error;
-  private $stmt;
-  private $errorCallbackFunction;
-  private $errorMsgFormat;
+  protected $error;
+  protected $errorCallbackFunction;
+  protected $errorMsgFormat;
 
   /**
-   * Create a new db object.
-   * @param string $dsn The dsn string.
-   * @param string $user [optional] <p>The database user name.</p>
-   * @param string $passwd [optional] <p>The database password.</p>
-   * @param array $options [optional] <p>A key=>value array of driver-specific connection options.<p>
-   * @param string $errorCallbackFunction [optional] <p>The callback function to show errors (e.g. "print", "echo", ...).</p>
-   * @param string $errorFormat [optional] <p>The format to display errors ("html" or "text").</p>
+   * Creates a new \Jelle_S\DataBase\Connection object.
+   *
+   * @param string $dsn
+   *   The dsn string.
+   * @param string $user
+   *   (optional) The database user name.
+   * @param string $passwd
+   *   (optional) The database password.
+   * @param array $options
+   *   (optional) A key => value array of driver-specific connection options.
+   * @param string $errorCallbackFunction
+   *   (optional) The callback function to show errors (e.g. "print", "echo", ...).
+   * @param string $errorFormat
+   *   (optional) The format to display errors ("html" or "text").
    */
   public function __construct($dsn, $user = NULL, $passwd = NULL, $errorCallbackFunction = NULL, $errorFormat = NULL) {
     $options = array(
-      \PDO::ATTR_PERSISTENT => true,
+      \PDO::ATTR_PERSISTENT => TRUE,
       \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     );
 
@@ -41,15 +52,15 @@ class Connection extends \PDO {
     }
 
     if (strtolower($errorFormat) !== "html") {
-      $errorFormat == "text";
+      $errorFormat = "text";
     }
 
-    $this->errorMsgFormat == strtolower($errorFormat);
+    $this->errorMsgFormat = strtolower($errorFormat);
     $this->errorCallbackFunction = $errorCallbackFunction;
 
     try {
       parent::__construct($dsn, $user, $passwd, $options);
-      $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('dbStatement'));
+      $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('\Jelle_S\DataBase\Statement\Statement'));
     }
     catch (\PDOException $e) {
       $this->error = $e->getMessage();
@@ -58,9 +69,14 @@ class Connection extends \PDO {
 
   /**
    * Build a select query.
-   * @param string $table The table name.
-   * @param array $fields [optional] <p>An array with the column names you want to select as values.</p>
-   * @return db
+   *
+   * @param string $table
+   *   The table name.
+   * @param array $fields
+   *   (optional) An array with the column names you want to select as values.
+   *
+   * @return \Jelle_S\DataBase\Query\Select
+   *   The select query.
    */
   public function select($table, array $fields = NULL) {
     $table = trim($table);
@@ -78,9 +94,15 @@ class Connection extends \PDO {
 
   /**
    * Build an insert query.
-   * @param string $table The table to insert the data into.
-   * @param array $fields [optional] <p>An array with the column names as keys and the values you want to insert as values.</p>
-   * @return db
+   *
+   * @param string $table
+   *   The table to insert the data into.
+   * @param array $fields
+   *   (optional) An array with the column names as keys and the values you want
+   *   to insert as values.
+   *
+   * @return \Jelle_S\DataBase\Query\Insert
+   *   The insert query.
    */
   public function insert($table, array $fields = NULL) {
     $query = new Query\Insert($this, $table);
@@ -92,9 +114,14 @@ class Connection extends \PDO {
 
   /**
    * Build an update query.
-   * @param string $table The table you want to update.
-   * @param array $fields [optional] <p>An array with the column names as keys and the values you want to insert as values.</p>
-   * @return db
+   *
+   * @param string $table
+   *   The table you want to update.
+   * @param array $fields
+   *   (optional) An array with the column names as keys and the values you want
+   *   to insert as values.
+   * @return \Jelle_S\DataBase\Query\Update
+   *   The update query.
    */
   public function update($table, array $fields = NULL) {
     $query = new Query\Update($this, $table);
@@ -106,8 +133,12 @@ class Connection extends \PDO {
 
   /**
    * Build a delete query.
-   * @param string $table The table you want to delete data from.
-   * @return db
+   *
+   * @param string $table
+   *   The table you want to delete data from.
+   *
+   * @return \Jelle_S\DataBase\Query\Delete
+   *   The delete query.
    */
   public function delete($table) {
     $query = new Query\Delete($this, $table);
@@ -116,8 +147,12 @@ class Connection extends \PDO {
 
   /**
    * Execute the query.
-   * @return mixed
-   * Returns false on failure, returns a dbStatement on succes.
+   *
+   * @param \Jelle_S\DataBase\Query\Query
+   *   The query to execute.
+   *
+   * @return \Jelle_S\DataBase\Statement\Statement|FALSE
+   *   FALSE on failure, returns a Statement on success.
    */
   public function run(Query\Query $query) {
     $this->error = "";
@@ -144,7 +179,7 @@ class Connection extends \PDO {
         }
         $stmt->bindValue($bind, $value, $type);
       }
-      if ($stmt->execute() !== false) {
+      if ($stmt->execute() !== FALSE) {
         return $stmt;
       }
     }
@@ -152,34 +187,29 @@ class Connection extends \PDO {
       print $e->getMessage();
       $this->error = $e->getMessage();
       $this->debug($query);
-      return false;
+      return FALSE;
     }
   }
 
   /**
-   * Prepares a statement for execution and returns a statement object
-   * @param string $statement <p>
-   * This must be a valid SQL statement for the target database server.
-   * </p>
-   * @param array $driver_options [optional] <p>
-   * This array holds one or more key=&gt;value pairs to set
-   * attribute values for the \PDOStatement object that this method
-   * returns. You would most commonly use this to set the
-   * \PDO::ATTR_CURSOR value to
-   * \PDO::CURSOR_SCROLL to request a scrollable cursor.
-   * Some drivers have driver specific options that may be set at
-   * prepare-time.
-   * </p>
-   * @return dbStatement If the database server successfully prepares the statement unless otherwise specified in the $driver_options argument,
-   * db::prepare returns a
-   * dbStatement object.
-   * If the database server cannot successfully prepare the statement,
-   * db::prepare returns false or emits
-   * \PDOException (depending on error handling).
-   * </p>
-   * <p>
-   * Emulated prepared statements do not communicate with the database server
-   * so db::prepare does not check the statement.
+   * Prepares a statement for execution and returns a statement object.
+   *
+   * @param string $sql
+   *   This must be a valid SQL statement for the target database server.
+   *
+   * @param array $driver_options [optional]
+   *   This array holds one or more key=&gt;value pairs to set attribute values
+   *   for the \PDOStatement object that this method returns. You would most
+   *   commonly use this to set the \PDO::ATTR_CURSOR value to
+   *   \PDO::CURSOR_SCROLL to request a scrollable cursor. Some drivers have
+   *   driver specific options that may be set at prepare-time.
+   *
+   * @return \Jelle_S\DataBase\Statement\Statement|FALSE
+   *   If the database server successfully prepares the statement unless
+   *   otherwise specified in the $driver_options argument, this method returns
+   *   a \Jelle_S\DataBase\Statement\Statement object. If the database server
+   *   cannot successfully prepare the statement, this method returns FALSE or
+   *   emits \PDOException (depending on error handling).
    */
   public function prepare($sql, $driver_options = array()) {
     if (!isset($driver_options[\PDO::ATTR_STATEMENT_CLASS])) {
@@ -190,6 +220,9 @@ class Connection extends \PDO {
 
   /**
    * Display the encountered errors.
+   *
+   * @param \Jelle_S\DataBase\Query\Query
+   *   The query to debug.
    */
   public function debug(Query\Query $query) {
     if (!empty($this->errorCallbackFunction)) {
@@ -198,7 +231,7 @@ class Connection extends \PDO {
         $error["SQL Statement"] = (string) $query;
       }
       if (!empty($this->bind)) {
-        $error["Bind Parameters"] = trim(print_r($query->getParameters(), true));
+        $error["Bind Parameters"] = trim(print_r($query->getParameters(), TRUE));
       }
 
       $backtrace = debug_backtrace();
@@ -236,10 +269,14 @@ class Connection extends \PDO {
   }
 
   /**
-   * Set the callback function and format to show errors (e.g. "print", "echo", ...).
-   * @param string $errorCallbackFunction The callback function.
-   * @param string $errorMsgFormat The format to display errors in ("html" or "text").
-   * @return db
+   * Set the function and format to show errors.
+   *
+   * @param string $errorCallbackFunction
+   *   The callback function (e.g. "print", "echo", ...).
+   * @param string $errorMsgFormat
+   * (optional) The format to display errors in ("html" or "text").
+   *
+   * @return $this
    */
   public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat = NULL) {
     if (empty($errorMsgFormat)) {
